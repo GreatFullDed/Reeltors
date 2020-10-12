@@ -5,6 +5,9 @@
  */
 package reeltorsproject;
 
+import forms.MainFrame;
+import models.Hiber;
+
 /**
  *
  * @author WSR
@@ -15,7 +18,9 @@ public class ReeltorsProject {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        // TODO code application logic here
+        Hiber.Start();
+        MainFrame mf = new MainFrame();
+        mf.setVisible(true); // Включение главного окна
     }
     
 }
