@@ -260,12 +260,14 @@ public class ClientRegDialog extends javax.swing.JDialog {
             String fname = FirstField1.getText();
             String mname = MiddleField3.getText();
             String lname = LastField2.getText();
+            //Проверка на заполненность ФИО
             if (fname.equals("")||mname.equals("")||lname.equals("")){
                 JOptionPane.showMessageDialog(this, "Поля "
                         + "\"Имя\", \"Фамилия\" и \"Отчество\" "
                         + "не должны быть пустыми!");
                 return;
-            }//Проверка на заполненность ФИО
+            }            
+            //Проверка поля Комиссия
             try {
                 phon = Integer.parseInt(PhoneField4.getText());
                 if ((phon > 100) || (PhoneField4.getText().equals(""))){
@@ -277,20 +279,22 @@ public class ClientRegDialog extends javax.swing.JDialog {
                 JOptionPane.showMessageDialog(this, "В поле \"Комиссия\""
                         + " должно быть число");
                 return;
-            }//Проверка поля Комиссия
+            }
             String log = LogField6.getText();
             String pas = PasField8.getText();
             String repPas = PasRepField7.getText();
+            //Проверка на заполненность в полях логин, пароль и повтор пароля
             if (log.equals("")||pas.equals("")||repPas.equals("")){
                 JOptionPane.showMessageDialog(this, "Поля "
                         + "\"Логин\", \"Пароль\" и \"Повторите пароль\" "
                         + "не должны быть пустыми!");
                 return;
-            }//Проверка на заполненность в полях логин, пароль и повтор пароля
+            }
+            //Проверка на совпадение паролей
             if (!pas.equals(repPas)){
                 JOptionPane.showMessageDialog(this, "Пароли не совпадают");
                 return;
-            }//Проверка на совпадение паролей
+            }
             List<User> listUser = Hiber.session.createQuery("from User "
                 + "where login like '"+log+"'").list();
             if (listUser.isEmpty()){
@@ -348,23 +352,35 @@ public class ClientRegDialog extends javax.swing.JDialog {
     }//GEN-LAST:event_jButton4ActionPerformed
 
     private boolean checkMail(String text){
-        char c;        
-        int j = 0;
-        ArrayList<Character> list = new ArrayList<>();        
-        for (int i = 0; i < text.length(); i++){
-            c = text.charAt(i);
-            list.add(c);
-        }
-        
-        for (char ch:list){           
-            if (((ch == '@')||(ch == '.')))            
-                j++;
-        }
-        
-        if (j>2 || j<2)
-            return false; 
-        else
+//        char c;        
+//        int j = 0;
+//        ArrayList<Character> list = new ArrayList<>();        
+//        for (int i = 0; i < text.length(); i++){
+//            c = text.charAt(i);
+//            list.add(c);
+//        }
+//
+//        
+//        for (char ch:list){           
+//            if (((ch == '@')||(ch == '.')))            
+//                j++;
+//        }
+//        
+//        if (j>2 || j<2)
+//            return false; 
+//        else
+//            return true;
+
+        try{
+            String[] tx1 = text.split("//@");
+            System.out.println(tx1[0]+tx1[1]);
+            String[] tx2 = tx1[1].split("//.");
+            System.out.println("\n"+tx2[0]+tx2[1]);
+            tx2[1].getBytes();
             return true;
+        }catch(Exception e){
+            return false;
+        }
     }
     
     /**

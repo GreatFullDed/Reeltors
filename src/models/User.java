@@ -109,6 +109,10 @@ abstract public class User  implements java.io.Serializable {
         this.lastName = lastName;
     }
 
+    @Override
+    public String toString(){
+        return getFirstName() + " " + getMiddleName() + " " + getLastName();
+    }
 }
 
 
