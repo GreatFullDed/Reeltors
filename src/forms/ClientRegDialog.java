@@ -7,6 +7,8 @@ package forms;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import models.Cleint;
@@ -242,20 +244,21 @@ public class ClientRegDialog extends javax.swing.JDialog {
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         flag = !flag; 
         if (flag){
-            jButton2.setText("Я клиент");
-            jLabel5.setVisible(false);
-            MailField5.setVisible(false);
-            jLabel4.setText("Комиссия");
-        } else {
             jButton2.setText("Я риэлтор");
             jLabel4.setText("Телефон");
             jLabel5.setVisible(true);
             MailField5.setVisible(true);
+        } else {           
+            jButton2.setText("Я клиент");
+            jLabel5.setVisible(false);
+            MailField5.setVisible(false);
+            jLabel4.setText("Комиссия");
         }
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
         //Регистрация и проверка условий клиента и риэлтора 
+        System.out.println(flag);
         if (!flag){        //Риэлтор               
             String fname = FirstField1.getText();
             String mname = MiddleField3.getText();
@@ -266,13 +269,14 @@ public class ClientRegDialog extends javax.swing.JDialog {
                         + "\"Имя\", \"Фамилия\" и \"Отчество\" "
                         + "не должны быть пустыми!");
                 return;
-            }            
+            }
             //Проверка поля Комиссия
             try {
                 phon = Integer.parseInt(PhoneField4.getText());
-                if ((phon > 100) || (PhoneField4.getText().equals(""))){
-                    JOptionPane.showMessageDialog(this, "Комиссия не может "
-                        + "превышать значение 100");
+                if ((phon > 100) || (PhoneField4.getText().equals("")) ||
+                        (phon < 0)){
+                    JOptionPane.showMessageDialog(this, "Комиссия должна "
+                        + "быть от 0 до 100");
                     return;
                 }
             } catch (Exception e) {
@@ -308,23 +312,27 @@ public class ClientRegDialog extends javax.swing.JDialog {
             String fname = FirstField1.getText();
             String mname = MiddleField3.getText();
             String lname = LastField2.getText();
-            try {
-                Integer phon = Integer.parseInt(PhoneField4.getText());
-            } catch (Exception e) {
-                JOptionPane.showMessageDialog(this, "Телефон должен состоять "
-                        + "из цифр");
-                return;
-            }            
             String mail = MailField5.getText();
-            if (!checkMail(mail)){
+            System.out.println("phon "+PhoneField4.getText() + "; email "+mail);
+            if (PhoneField4.getText().equals("")&&mail.equals("")){
+                JOptionPane.showMessageDialog(this, "Заполните "
+                        + "\"Номер телефона\"  или \"email\"");
+                return;
+            }
+            if (!PhoneField4.getText().equals(""))
+                try {
+                    Integer phon = Integer.parseInt(PhoneField4.getText());
+                } catch (Exception e) {
+                    JOptionPane.showMessageDialog(this, "Телефон должен состоять "
+                            + "из цифр");
+                    return;
+                }            
+            
+            if (!checkMail(mail)&&!mail.equals("")){
                 JOptionPane.showMessageDialog(this, "Неправильно введён email."
                         + "Пример написания: example@examp.ex");
                 return;
-            }
-            if (PhoneField4.equals("")&&mail.equals("")){
-                JOptionPane.showMessageDialog(this, "Заполните "
-                        + "\"Номер телефона\"  или \"email\"");
-            }            
+            }                        
             String log = LogField6.getText();
             String pas = PasField8.getText();
             String repPas = PasRepField7.getText();
@@ -352,35 +360,11 @@ public class ClientRegDialog extends javax.swing.JDialog {
     }//GEN-LAST:event_jButton4ActionPerformed
 
     private boolean checkMail(String text){
-//        char c;        
-//        int j = 0;
-//        ArrayList<Character> list = new ArrayList<>();        
-//        for (int i = 0; i < text.length(); i++){
-//            c = text.charAt(i);
-//            list.add(c);
-//        }
-//
-//        
-//        for (char ch:list){           
-//            if (((ch == '@')||(ch == '.')))            
-//                j++;
-//        }
-//        
-//        if (j>2 || j<2)
-//            return false; 
-//        else
-//            return true;
-
-        try{
-            String[] tx1 = text.split("//@");
-            System.out.println(tx1[0]+tx1[1]);
-            String[] tx2 = tx1[1].split("//.");
-            System.out.println("\n"+tx2[0]+tx2[1]);
-            tx2[1].getBytes();
-            return true;
-        }catch(Exception e){
-            return false;
-        }
+        String pattern = "^[__A-Za-z0-9-\\+]+(\\.[A-Za-z0-9-]+)*@"+
+                "[A-Za-z0-9-]+(\\.[A-Za-z0-9-]+)*(\\.[A-Za-z]{2,})$";
+        Pattern p = Pattern.compile(pattern);
+        Matcher m = p.matcher(text);
+        return m.matches();
     }
     
     /**
