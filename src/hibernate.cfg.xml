@@ -46,10 +46,13 @@ Contributor(s):
     <property name="hibernate.connection.url">jdbc:mysql://localhost:3306/reeltordb?serverTimezone=UTC</property>
     <property name="hibernate.connection.username">root</property>
     <property name="hibernate.connection.password">1234</property>
-    <mapping class="models.User"/>
+    <mapping class="models.Apartment"/>
     <mapping class="models.Admin"/>
-    <mapping class="models.Reeltor"/>
+    <mapping class="models.Field"/>
+    <mapping class="models.House"/>
+    <mapping class="models.User"/>
     <mapping class="models.Cleint"/>
-    <mapping class="models.Hiber"/>
+    <mapping class="models.Property"/>
+    <mapping class="models.Reeltor"/>
   </session-factory>
 </hibernate-configuration>
